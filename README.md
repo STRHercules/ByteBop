@@ -1,5 +1,7 @@
 # ByteBop, a Discord Music Bot for Plex
 
+![Preview](pics/Presence.png)
+
 A self-hosted Discord music bot that streams directly from your personal Plex Media Server. All slash commands, rich embeds, paginated search, custom playlists, and fully independent multi-server streaming.
 
 ---
@@ -158,6 +160,8 @@ All commands are Discord slash commands (`/command`). Parameter names and descri
 
 ### Search
 
+![Search](pics/Search.png)
+
 | Command | Description |
 |---|---|
 | `/search <query>` | Search your Plex library with full paginated results |
@@ -175,6 +179,8 @@ All commands are Discord slash commands (`/command`). Parameter names and descri
 ---
 
 ### Playback
+
+![Playback](pics/Playing.png)
 
 | Command | Parameters | Description |
 |---|---|---|
@@ -209,6 +215,8 @@ Results are deduplicated. If only one match is found, it plays immediately. If m
 ---
 
 ### Custom Playlists
+
+![Custom Playlists](pics/Playlist.png)
 
 Custom playlists are stored locally as JSON files in `./playlists/<guild_id>/`. They are per-server and persist across bot restarts. Tracks are stored by Plex `ratingKey` for reliable resolution.
 
