@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord import app_commands
 import os
 from dotenv import load_dotenv
@@ -27,9 +27,27 @@ class PlexBot(commands.Bot):
         await self.tree.sync()
         print("✅ Slash commands synced")
 
+        # Start the presence refresh loop
+        self.refresh_presence.start()
+
+    @tasks.loop(minutes=30)
+    async def refresh_presence(self):
+        """Refresh Plex stats in the bot's presence every 30 minutes."""
+        music_cog = self.cogs.get("Music")
+        if music_cog:
+            await music_cog._set_plex_presence()
+
+    @refresh_presence.before_loop
+    async def before_refresh_presence(self):
+        await self.wait_until_ready()
+
     async def on_ready(self):
         print(f"✅ Logged in as {self.user} (ID: {self.user.id})")
         print(f"📡 Streaming across {len(self.guilds)} server(s) simultaneously")
+        # Set presence immediately on ready (the loop also fires every 30 min)
+        music_cog = self.cogs.get("Music")
+        if music_cog:
+            await music_cog._set_plex_presence()
 
 
 bot = PlexBot(command_prefix="!", intents=intents, help_command=None)

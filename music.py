@@ -15,7 +15,6 @@ import os
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Optional
-from datetime import datetime, timezone
 
 
 # ── Data classes ───────────────────────────────────────────────────────────────
@@ -232,14 +231,21 @@ class Music(commands.Cog):
         }
         return discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(track.stream_url, **opts), volume=volume)
 
-    async def _update_presence(self, track: Optional[Track] = None):
-        activity = discord.Activity(
-            type=discord.ActivityType.listening,
-            name=f"{track.title} - {track.artist}",
-            state=track.album,
-            start=datetime.now(timezone.utc),
-        ) if track else None
-        await self.bot.change_presence(activity=activity)
+    async def _set_plex_presence(self):
+        """Set bot presence to Plex server stats. Called on startup and periodically."""
+        try:
+            lib = self._music_library()
+            artists = lib.totalViewSize(libtype="artist")
+            albums  = lib.totalViewSize(libtype="album")
+            tracks  = lib.totalViewSize(libtype="track")
+            name = f"{artists:,} artists · {albums:,} albums · {tracks:,} tracks"
+            activity = discord.Activity(
+                type=discord.ActivityType.watching,
+                name=name,
+            )
+            await self.bot.change_presence(status=discord.Status.online, activity=activity)
+        except Exception as e:
+            print(f"[presence] Could not set Plex presence: {e}")
 
     def _play_next(self, state: GuildState, vc: discord.VoiceClient):
         """After-callback — no ctx needed, sends to state.text_channel."""
@@ -253,7 +259,6 @@ class Music(commands.Cog):
                     state.text_channel.send("✅ Queue finished. Disconnecting..."), self.bot.loop
                 )
             asyncio.run_coroutine_threadsafe(vc.disconnect(), self.bot.loop)
-            asyncio.run_coroutine_threadsafe(self._update_presence(None), self.bot.loop)
             return
 
         next_track = state.queue.popleft()
@@ -264,7 +269,6 @@ class Music(commands.Cog):
             asyncio.run_coroutine_threadsafe(
                 state.text_channel.send(embed=self._now_playing_embed(next_track, state)), self.bot.loop
             )
-        asyncio.run_coroutine_threadsafe(self._update_presence(next_track), self.bot.loop)
 
     def _now_playing_embed(self, track: Track, state: GuildState) -> discord.Embed:
         embed = discord.Embed(
@@ -326,7 +330,6 @@ class Music(commands.Cog):
         else:
             state.current = track
             vc.play(self._make_source(track, state.volume), after=lambda e: self._play_next(state, vc))
-            await self._update_presence(track)
             await interaction.followup.send(embed=self._now_playing_embed(track, state))
 
     @app_commands.command(name="playalbum", description="Search Plex and queue a full album")
@@ -358,7 +361,6 @@ class Music(commands.Cog):
         else:
             state.current = first
             vc.play(self._make_source(first, state.volume), after=lambda e: self._play_next(state, vc))
-            await self._update_presence(first)
             await interaction.followup.send(
                 content=f"💿 Playing **{first.album}** ({len(tracks)} tracks)",
                 embed=self._now_playing_embed(first, state),
@@ -393,7 +395,6 @@ class Music(commands.Cog):
         else:
             state.current = first
             vc.play(self._make_source(first, state.volume), after=lambda e: self._play_next(state, vc))
-            await self._update_presence(first)
             await interaction.followup.send(
                 content=f"📋 Playing Plex playlist **{name}** ({len(tracks)} tracks)",
                 embed=self._now_playing_embed(first, state),

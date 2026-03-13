@@ -1,4 +1,4 @@
-# 🎵 ByteBop — Plex Discord Music Bot
+# 🎵 ByteBop, a Discord Music Bot for Plex
 
 A self-hosted Discord music bot that streams directly from your personal Plex Media Server. All slash commands, rich embeds, paginated search, custom playlists, and fully independent multi-server streaming.
 
