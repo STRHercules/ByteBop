@@ -1,10 +1,10 @@
-# 🎵 ByteBop, a Discord Music Bot for Plex
+# ByteBop, a Discord Music Bot for Plex
 
 A self-hosted Discord music bot that streams directly from your personal Plex Media Server. All slash commands, rich embeds, paginated search, custom playlists, and fully independent multi-server streaming.
 
 ---
 
-## ✨ Features
+## Features
 
 - **Slash commands** — all commands are native Discord `/` commands with descriptions, parameter hints, and autocomplete
 - **Plex integration** — searches tracks, artists, and albums simultaneously for the best match
@@ -17,7 +17,7 @@ A self-hosted Discord music bot that streams directly from your personal Plex Me
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 | Requirement | Notes |
 |---|---|
@@ -28,7 +28,7 @@ A self-hosted Discord music bot that streams directly from your personal Plex Me
 
 ---
 
-## 🚀 Setup
+## Setup
 
 ### 1. Install FFmpeg
 
@@ -75,8 +75,8 @@ PyNaCl>=1.5.0
 3. Go to the **Bot** tab → click **Add Bot**
 4. Under **Token** → click **Reset Token** and copy it (save this for `.env`)
 5. Under **Privileged Gateway Intents**, enable:
-   - ✅ **Message Content Intent**
-   - ✅ **Server Members Intent** (recommended)
+   - **Message Content Intent**
+   - **Server Members Intent** (recommended)
 6. Go to **OAuth2 → URL Generator**:
    - **Scopes:** `bot`, `applications.commands`
    - **Bot Permissions:** `Connect`, `Speak`, `Send Messages`, `Read Message History`, `Use Voice Activity`, `Add Reactions`, `Embed Links`
@@ -138,25 +138,25 @@ On first startup you should see:
 Connecting to Plex at http://localhost:32400 ...
 Connected to Plex: Your Server Name
 Libraries: [('Music', 'artist'), ...]
-🎵 Music cog loaded
-📋 Playlists cog loaded
-🔍 Search cog loaded
-✅ Slash commands synced
-✅ Logged in as ByteBop#0000
-📡 Streaming across 1 server(s) simultaneously
+Music cog loaded
+Playlists cog loaded
+Search cog loaded
+Slash commands synced
+Logged in as ByteBop#0000
+Streaming across 1 server(s) simultaneously
 ```
 
 > **Slash command propagation:** Global command sync can take up to **1 hour** to appear in all servers. For instant sync during development, use the owner-only prefix command `!sync <guild_id>` after the bot is online.
 
 ---
 
-## 💬 Commands
+## Commands
 
 All commands are Discord slash commands (`/command`). Parameter names and descriptions are shown natively in Discord's command menu.
 
 ---
 
-### 🔍 Search
+### Search
 
 | Command | Description |
 |---|---|
@@ -166,15 +166,15 @@ All commands are Discord slash commands (`/command`). Parameter names and descri
 
 | Action | Description |
 |---|---|
-| ▶ **Play** | Play immediately, or add to queue if something is already playing |
-| 📋 **Add to Playlist** | Add the track to any of your custom playlists |
-| 🎤 **Search Artist** | Show all tracks by this artist (paginated) |
-| 💿 **Search Album** | Show all tracks from this album |
-| ← **Back** | Return to the search results |
+| **Play** | Play immediately, or add to queue if something is already playing |
+| **Add to Playlist** | Add the track to any of your custom playlists |
+| **Search Artist** | Show all tracks by this artist (paginated) |
+| **Search Album** | Show all tracks from this album |
+| **Back** | Return to the search results |
 
 ---
 
-### 🎵 Playback
+### Playback
 
 | Command | Parameters | Description |
 |---|---|---|
@@ -199,7 +199,7 @@ Results are deduplicated. If only one match is found, it plays immediately. If m
 
 ---
 
-### 📋 Queue
+### Queue
 
 | Command | Description |
 |---|---|
@@ -208,7 +208,7 @@ Results are deduplicated. If only one match is found, it plays immediately. If m
 
 ---
 
-### 📋 Custom Playlists
+### Custom Playlists
 
 Custom playlists are stored locally as JSON files in `./playlists/<guild_id>/`. They are per-server and persist across bot restarts. Tracks are stored by Plex `ratingKey` for reliable resolution.
 
@@ -228,7 +228,7 @@ All `name` parameters support **autocomplete** — Discord will suggest matching
 
 ---
 
-### 🛠️ Utility
+### Utility
 
 | Command | Parameters | Description |
 |---|---|---|
@@ -244,7 +244,7 @@ All `name` parameters support **autocomplete** — Discord will suggest matching
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ByteBop/
@@ -265,7 +265,7 @@ ByteBop/
 
 ---
 
-## 🏗️ Architecture Notes
+## Architecture Notes
 
 ### Multi-server streaming
 Each Discord server (guild) has its own `GuildState` object containing an independent queue, current track, volume level, loop toggle, and text channel reference. The bot can stream different music to multiple voice channels across multiple servers simultaneously without any state bleed between them.
@@ -282,13 +282,13 @@ Tracks added to custom playlists are stored with their Plex `ratingKey`. When a 
 ### Bot presence
 Discord bots have a single global presence shared across every server — it is not possible to show different statuses per guild. Rather than showing the currently playing track (which would only reflect one server and be misleading in others), the bot displays live stats from your Plex Music library:
 
-> 📺 Watching **1,247 artists · 4,832 albums · 62,104 tracks**
+> **1,247 artists · 4,832 albums · 62,104 tracks**
 
 Stats are fetched from Plex on startup and automatically refreshed every 30 minutes.
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 **Slash commands don't appear in Discord**
 - Make sure you invited the bot with the `applications.commands` scope
@@ -320,6 +320,6 @@ Stats are fetched from Plex on startup and automatically refreshed every 30 minu
 
 ---
 
-## 📄 License
+## License
 
 MIT — do whatever you want with it.
