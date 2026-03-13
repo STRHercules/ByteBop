@@ -12,7 +12,7 @@ A self-hosted Discord music bot that streams directly from your personal Plex Me
 - **Custom playlists** — create and manage per-server playlists stored as local JSON files, independent of Plex
 - **Plex playlists** — play playlists that live directly on your Plex server
 - **Multi-server streaming** — each Discord server gets a fully independent queue, volume, and voice connection simultaneously
-- **Now Playing presence** — bot status updates live with the current track
+- **Plex library presence** — bot status displays live Plex library stats (artist, album, and track counts), refreshing every 30 minutes
 - **Per-server state** — volume, loop mode, and queue are isolated per server
 
 ---
@@ -278,6 +278,13 @@ On startup the bot scans all Plex library sections and prefers a section named *
 
 ### Custom playlist track storage
 Tracks added to custom playlists are stored with their Plex `ratingKey`. When a playlist is played, each track is re-fetched from Plex by rating key to get a fresh stream URL. This means playlists remain valid even if you rename or move files in Plex, as long as the media exists in your library.
+
+### Bot presence
+Discord bots have a single global presence shared across every server — it is not possible to show different statuses per guild. Rather than showing the currently playing track (which would only reflect one server and be misleading in others), the bot displays live stats from your Plex Music library:
+
+> 📺 Watching **1,247 artists · 4,832 albums · 62,104 tracks**
+
+Stats are fetched from Plex on startup and automatically refreshed every 30 minutes.
 
 ---
 
